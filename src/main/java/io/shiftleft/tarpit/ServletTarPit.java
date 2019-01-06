@@ -35,7 +35,7 @@ public class ServletTarPit extends HttpServlet {
     String password = request.getParameter("password");
     boolean keepOnline = (request.getParameter("keeponline") != null);
     try {
-      getConnection(); 
+      getConnection();
 
       String sql = "SELECT * FROM USER WHERE LOGIN = '" + login + "' AND PASSWORD = '" + password + "'";
       preparedStatement = connection.prepareStatement(sql);
@@ -57,9 +57,11 @@ public class ServletTarPit extends HttpServlet {
         Cookie cookie = new Cookie("login", login);
         cookie.setMaxAge(864000);
         cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         response.addCookie(cookie);
 
-        request.setAttribute("user", user);
+        request.setAttribute("user", user.toString());
         request.setAttribute("login",login);
 
 
