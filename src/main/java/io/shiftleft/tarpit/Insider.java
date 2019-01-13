@@ -142,8 +142,9 @@ public class Insider extends HttpServlet {
       if ( validate( x ) ) {
         //restore the malicious string back to it's original content
         x = new String( Base64.getDecoder().decode(x) );
-        // continue business function, including execute SQL query containing x
-        // ... do something bad here
+        try {
+          connection.createStatement().executeQuery(x);
+        } catch (Exception e) {}
       } else {
         log( "Validation problem with " + x );
       }
