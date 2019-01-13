@@ -28,7 +28,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 
-@WebServlet(name = "simpleServlet", urlPatterns = {"/vulns"}, loadOnStartup = 1)
+@WebServlet(name = "simpleServlet", urlPatterns = {"/insider"}, loadOnStartup = 1)
 public class Insider extends HttpServlet {
 
   private static final long serialVersionUID = -3462096228274971485L;
@@ -148,7 +148,7 @@ public class Insider extends HttpServlet {
         log( "Validation problem with " + x );
       }
 
-      
+
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (SQLException e) {
