@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "simpleServlet", urlPatterns = {"/hello"}, loadOnStartup = 1)
+@WebServlet(name = "simpleServlet", urlPatterns = {"/vulns"}, loadOnStartup = 1)
 public class ServletTarPit extends HttpServlet {
 
   private static final long serialVersionUID = -3462096228274971485L;
@@ -57,17 +57,15 @@ public class ServletTarPit extends HttpServlet {
         Cookie cookie = new Cookie("login", login);
         cookie.setMaxAge(864000);
         cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
         response.addCookie(cookie);
 
         request.setAttribute("user", user.toString());
         request.setAttribute("login",login);
 
-
         LOGGER.info(" User " + user + " successfully logged in ");
 
         getServletContext().getRequestDispatcher("/dashboard.jsp").forward(request,response);
+
       } else {
         request.setAttribute("login", login);
         request.setAttribute("password", password);
