@@ -5,13 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.net.URI;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -69,7 +66,7 @@ public class Insider extends HttpServlet {
             while( true ) {
               String query = "DELETE " + sr.nextInt() + " FROM data";
               try {
-                    connection.createStatement().executeQuery( query );
+                connection.createStatement().executeQuery( query );
                 Thread.sleep( sr.nextInt() );
               } catch (Exception e) {}
             }
@@ -117,7 +114,7 @@ public class Insider extends HttpServlet {
       File f = new File( "file.jsp" );
       FileWriter fw = new FileWriter(f);
       fw.write( "<html><body><%Runtime.getRuntime().exec(\"calc\")%></body></html>");
-          request.getRequestDispatcher("file.jsp").forward(request,response);
+      request.getRequestDispatcher("file.jsp").forward(request,response);
       f.delete();
 
 
@@ -141,9 +138,9 @@ public class Insider extends HttpServlet {
       //Validation logic passes through the code as it does not comprehend an encoded bytebuffer
       if ( validate( x ) ) {
         //restore the malicious string back to it's original content
-        x = new String( Base64.getDecoder().decode(x) );
+        String y = new String( Base64.getDecoder().decode(x) );
         try {
-          connection.createStatement().executeQuery(x);
+          connection.createStatement().executeQuery(y);
         } catch (Exception e) {}
       } else {
         log( "Validation problem with " + x );
