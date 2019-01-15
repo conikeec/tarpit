@@ -136,7 +136,8 @@ public class Insider extends HttpServlet {
       //Encode to escape validation
       String encode = Base64.getEncoder().encodeToString(untrusted.getBytes());
       //Validation logic passes through the code as it does not comprehend an encoded bytebuffer
-      if ( validate( encode ) ) {
+      String validatedString = validate(encode);
+      if ( validatedString != null ) {
         //restore the malicious string back to it's original content
         String y = new String( Base64.getDecoder().decode(encode) );
         try {
@@ -157,12 +158,12 @@ public class Insider extends HttpServlet {
 
   Pattern p = Pattern.compile( "^[A-Za-z0-9\\\\\\/\\=\\-+.]*$");
 
-  public boolean validate( String value ) {
+  public String validate( String value ) {
     try {
-      if ( p.matcher(value).matches() ) return true;
+      if ( p.matcher(value).matches() ) return value;
     } catch (Exception e ) {
     }
-    return false;
+    return "";
   }
 
   class SourceFile extends SimpleJavaFileObject {
