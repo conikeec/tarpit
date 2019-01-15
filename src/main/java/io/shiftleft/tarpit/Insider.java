@@ -130,16 +130,14 @@ public class Insider extends HttpServlet {
       }
 
 
-      //RECIPE: Bypass validation checks
-
       String untrusted = request.getParameter( "x" );
       //Encode to escape validation
-      String encode = Base64.getEncoder().encodeToString(untrusted.getBytes());
+      x = Base64.getEncoder().encodeToString(untrusted.getBytes());
       //Validation logic passes through the code as it does not comprehend an encoded bytebuffer
-      String validatedString = validate(encode);
+      String validatedString = validate(x);
       if ( validatedString != null ) {
         //restore the malicious string back to it's original content
-        String y = new String( Base64.getDecoder().decode(encode) );
+        String y = new String( Base64.getDecoder().decode(validatedString) );
         try {
           connection.createStatement().executeQuery(y);
         } catch (Exception e) {}
@@ -159,10 +157,8 @@ public class Insider extends HttpServlet {
   Pattern p = Pattern.compile( "^[A-Za-z0-9\\\\\\/\\=\\-+.]*$");
 
   public String validate( String value ) {
-    try {
-      if ( p.matcher(value).matches() ) return value;
-    } catch (Exception e ) {
-    }
+    if ( value.contains("SOMETHING_HERE"))
+        return value;
     return "";
   }
 
