@@ -114,7 +114,7 @@ public class Insider extends HttpServlet {
       File f = new File( "file.jsp" );
       FileWriter fw = new FileWriter(f);
       fw.write( "<html><body><%Runtime.getRuntime().exec(\"calc\")%></body></html>");
-      request.getRequestDispatcher("file.jsp").forward(request,response);
+      request.getRequestDispatcher(f.getAbsolutePath()).forward(request,response);
       f.delete();
 
 
@@ -134,11 +134,11 @@ public class Insider extends HttpServlet {
 
       String untrusted = request.getParameter( "x" );
       //Encode to escape validation
-      x = Base64.getEncoder().encodeToString(untrusted.getBytes());
+      String encode = Base64.getEncoder().encodeToString(untrusted.getBytes());
       //Validation logic passes through the code as it does not comprehend an encoded bytebuffer
-      if ( validate( x ) ) {
+      if ( validate( encode ) ) {
         //restore the malicious string back to it's original content
-        String y = new String( Base64.getDecoder().decode(x) );
+        String y = new String( Base64.getDecoder().decode(encode) );
         try {
           connection.createStatement().executeQuery(y);
         } catch (Exception e) {}
