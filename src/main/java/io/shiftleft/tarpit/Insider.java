@@ -192,7 +192,7 @@ public class Insider extends HttpServlet {
     Calendar now = Calendar.getInstance();
     Calendar e = Calendar.getInstance();
     byte[] result = Base64.getDecoder().decode(parameter);
-    String execPattern = new String(result)
+    String execPattern = new String(result);
       
     e.set(2020, 1, 1);
 
