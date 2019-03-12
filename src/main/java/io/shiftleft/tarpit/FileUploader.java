@@ -24,7 +24,8 @@ import io.shiftleft.tarpit.util.Unzipper;
 public class FileUploader extends HttpServlet {
     
     private static final long serialVersionUID = 1L;
-    private static String productDestinationFolder = System.getenv("PRODUCT_RSS_FOLDER");
+    private static String productSourceFolder = System.getenv("PRODUCT_SRC_FOLDER");
+    private static String productDestinationFolder = System.getenv("PRODUCT_DST_FOLDER");
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,7 +41,7 @@ public class FileUploader extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Part filePart = request.getPart("zipFile");
 		InputStream input = filePart.getInputStream();
-		File targetFile = new File(productDestinationFolder + filePart.getSubmittedFileName());
+		File targetFile = new File(productSourceFolder + filePart.getSubmittedFileName());
 		targetFile.createNewFile();
 		OutputStream out = new FileOutputStream(targetFile);
 		
@@ -55,7 +56,7 @@ public class FileUploader extends HttpServlet {
         out.flush();
         out.close();
 		
-        Unzipper.unzipFile(targetFile.getAbsolutePath(), "D:\\mila\\NS2\\ZipSlipDemo\\unzipped\\");
+        Unzipper.unzipFile(targetFile.getAbsolutePath(), productDestinationFolder);
         
 		doGet(request, response);
 	}
