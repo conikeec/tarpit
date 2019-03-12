@@ -1,4 +1,4 @@
-package io.shiftleft.tarpit.io.shiftleft.tarpit.model;
+package io.shiftleft.tarpit.model;
 
 import java.io.Serializable;
 

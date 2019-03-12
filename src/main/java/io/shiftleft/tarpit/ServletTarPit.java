@@ -1,6 +1,6 @@
 package io.shiftleft.tarpit;
 
-import io.shiftleft.tarpit.io.shiftleft.tarpit.model.User;
+import io.shiftleft.tarpit.model.User;
 import java.io.IOException;
 
 import java.sql.Connection;
