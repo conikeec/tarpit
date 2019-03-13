@@ -40,7 +40,7 @@ public class ServletTarPit extends HttpServlet {
 
     String login = request.getParameter("login");
     String password = request.getParameter("password");
-    
+
     boolean keepOnline = (request.getParameter("keeponline") != null);
 
     LOGGER.info("HardCoded AWS Properties are " + ACCESS_KEY_ID + " and " + SECRET_KEY);
@@ -55,11 +55,12 @@ public class ServletTarPit extends HttpServlet {
 
       getConnection();
 
-      String sql = "SELECT * FROM USER WHERE LOGIN = '" + login + "' AND PASSWORD = '" + password + "'";
+      String sql =
+          "SELECT * FROM USER WHERE LOGIN = '" + login + "' AND PASSWORD = '" + password + "'";
       preparedStatement = connection.prepareStatement(sql);
       resultSet = preparedStatement.getResultSet();
 
-      if(resultSet.next()) {
+      if (resultSet.next()) {
 
         login = resultSet.getString("login");
         password = resultSet.getString("password");
@@ -71,7 +72,7 @@ public class ServletTarPit extends HttpServlet {
             resultSet.getString("address1"),
             resultSet.getString("address2"),
             resultSet.getString("zipCode"));
-            
+
         String creditInfo = resultSet.getString("userCreditCardInfo");
         byte[] cc_enc_str = des.doFinal(creditInfo.getBytes());
 
@@ -81,22 +82,22 @@ public class ServletTarPit extends HttpServlet {
         response.addCookie(cookie);
 
         request.setAttribute("user", user.toString());
-        request.setAttribute("login",login);
+        request.setAttribute("login", login);
 
         LOGGER.info(" User " + user + " successfully logged in ");
         LOGGER.info(" User " + user + " credit info is " + cc_enc_str);
 
-        getServletContext().getRequestDispatcher("/dashboard.jsp").forward(request,response);
+        getServletContext().getRequestDispatcher("/dashboard.jsp").forward(request, response);
 
       } else {
         request.setAttribute("login", login);
         request.setAttribute("password", password);
         request.setAttribute("keepOnline", keepOnline);
-        request.setAttribute("message", "Failed ti Sign in. Please verify credentials");
+        request.setAttribute("message", "Failed to Sign in. Please verify credentials");
 
         LOGGER.info(" UserId " + login + " failed to logged in ");
 
-        getServletContext().getRequestDispatcher("/signIn.jsp").forward(request,response);
+        getServletContext().getRequestDispatcher("/signIn.jsp").forward(request, response);
       }
     } catch (Exception e) {
       throw new ServletException(e);
