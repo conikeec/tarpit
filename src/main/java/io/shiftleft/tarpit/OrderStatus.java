@@ -47,6 +47,7 @@ public class OrderStatus extends HttpServlet {
       getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
 
       boolean loggedIn = request.isUserInRole("customer");
+
       if (loggedIn) {
 
         getConnection();
