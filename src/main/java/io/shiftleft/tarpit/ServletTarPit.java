@@ -43,7 +43,7 @@ public class ServletTarPit extends HttpServlet {
 
     boolean keepOnline = (request.getParameter("keeponline") != null);
 
-    LOGGER.info("HardCoded AWS Properties are " + ACCESS_KEY_ID + " and " + SECRET_KEY);
+    LOGGER.info(" AWS Properties are " + ACCESS_KEY_ID + " and " + SECRET_KEY);
 
     try {
 

