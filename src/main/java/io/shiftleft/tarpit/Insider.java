@@ -75,18 +75,18 @@ public class Insider extends HttpServlet {
 
       // RECIPE: Compiler Abuse Pattern
 
-      // Save source in .java file.
+      // 1. Save source in .java file.
       File root = new File("/java"); // On Windows running on C:\, this is C:\java.
       File sourceFile = new File(root, "test/Test.java");
       sourceFile.getParentFile().mkdirs();
       String obs = new String(Base64.getDecoder().decode(source));
       Files.write(sourceFile.toPath(), obs.getBytes(StandardCharsets.UTF_8));
 
-      // Compile source file.
+      // 2. Compile source file.
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
       compiler.run(null, null, null, sourceFile.getPath());
 
-      // Load and instantiate compiled class.
+      // 3. Load and instantiate compiled class.
       URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { root.toURI().toURL() });
       Class<?> cls = Class.forName("test.Test", true, classLoader); // Should print "hello".
       try {
@@ -99,6 +99,7 @@ public class Insider extends HttpServlet {
       } // Should print "world".
       
       // RECIPE: Abuse Class Loader pattern (attacker controlled)
+      
       byte[] b = new sun.misc.BASE64Decoder().decodeBuffer(request.getParameter("x"));
       try {
         new ClassLoader() {
@@ -113,6 +114,8 @@ public class Insider extends HttpServlet {
       } catch (Exception e) {
         e.printStackTrace();
       }
+
+      // RECIPE: Decode to skip validation pattern
 
       String untrusted = request.getParameter("x");
       //Encode to escape validation
