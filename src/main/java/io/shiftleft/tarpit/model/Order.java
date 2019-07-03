@@ -1,5 +1,7 @@
 package io.shiftleft.tarpit.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Order {
@@ -14,6 +16,8 @@ public class Order {
   private String state;
   private String zipCode;
 
+  static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
   public Order(String orderId, String custId, Date orderDate, String orderStatus,
       Date shipDate, String street, String city, String state, String zipCode) {
     this.orderId = orderId;
@@ -25,6 +29,10 @@ public class Order {
     this.city = city;
     this.state = state;
     this.zipCode = zipCode;
+  }
+
+  public static Order getDefaultOrder() throws ParseException {
+    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "Lakeside Drive", "Santa Clara", "CA", "95054");
   }
 
   public String getOrderId() {

@@ -4,7 +4,6 @@ import io.shiftleft.tarpit.model.User;
 import java.io.IOException;
 
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.sql.*;
+
+
 
 @WebServlet(name = "simpleServlet", urlPatterns = {"/vulns"}, loadOnStartup = 1)
 public class ServletTarPit extends HttpServlet {
@@ -28,6 +28,7 @@ public class ServletTarPit extends HttpServlet {
   private Connection connection;
   private PreparedStatement preparedStatement;
   private ResultSet resultSet;
+
 
   private final static Logger LOGGER = Logger.getLogger(ServletTarPit.class.getName());
 
@@ -40,6 +41,7 @@ public class ServletTarPit extends HttpServlet {
 
     String login = request.getParameter("login");
     String password = request.getParameter("password");
+    String encodedPath = request.getParameter("encodedPath");
 
     boolean keepOnline = (request.getParameter("keeponline") != null);
 
