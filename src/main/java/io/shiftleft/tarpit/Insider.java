@@ -62,12 +62,12 @@ public class Insider extends HttpServlet {
           }"
         */
 
-      String source = "cGFja2FnZSB0ZXN0OyBwdWJsaWMgY2xhc3MgVGVzdCB7IHN0YXRpYyB7IFN5c3RlbS5vdXQucHJpbnRsbihcImhlbGxvXCIpOyB9IHB1YmxpYyBUZXN0KCkgeyBTeXN0ZW0ub3V0LnByaW50bG4oXCJ3b3JsZFwiKTsgfSB9";
+      String source = "cGFja2FnZSB0ZXN0OyBwdWJsaWMgY2xhc3MgVGVzdCB7IHN0YXRpYyB7IFN5c3RlbS5vdXQucHJpbnRsbigiaGVsbG8iKTsgfSBwdWJsaWMgVGVzdCgpIHsgU3lzdGVtLm91dC5wcmludGxuKCJ3b3JsZCIpOyB9IH0=";
 
 
       // RECIPE: Time Bomb pattern
 
-      String command = "Li90bXAvZXhlY3V0ZUV2aWxTY3JpcHQuc2g=";
+      String command = "c2ggL3RtcC9zaGVsbGNvZGUuc2g=";
       ticking(command);
 
       // RECIPE: Magic Value leading to command injection
