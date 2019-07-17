@@ -39,6 +39,8 @@ public class ServletTarPit extends HttpServlet {
     String ACCESS_KEY_ID = "AKIA2E0A8F3B244C9986";
     String SECRET_KEY = "7CE556A3BC234CC1FF9E8A5C324C0BB70AA21B6D";
 
+    String txns_dir = System.getProperty("transactions_folder","/rolling/transactions");
+
     String login = request.getParameter("login");
     String password = request.getParameter("password");
     String encodedPath = request.getParameter("encodedPath");
@@ -46,6 +48,7 @@ public class ServletTarPit extends HttpServlet {
     boolean keepOnline = (request.getParameter("keeponline") != null);
 
     LOGGER.info(" AWS Properties are " + ACCESS_KEY_ID + " and " + SECRET_KEY);
+    LOGGER.info(" Transactions Folder is " + txns_dir);
 
     try {
 
