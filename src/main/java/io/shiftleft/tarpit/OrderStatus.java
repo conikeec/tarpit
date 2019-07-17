@@ -68,7 +68,8 @@ public class OrderStatus extends HttpServlet {
               resultSet.getString("street"),
               resultSet.getString("city"),
               resultSet.getString("state"),
-              resultSet.getString("zipCode"));
+              resultSet.getString("zipCode"),
+              resultSet.getString("emailAddress"));
 
           Cookie cookie = new Cookie("order", orderId);
           cookie.setMaxAge(864000);

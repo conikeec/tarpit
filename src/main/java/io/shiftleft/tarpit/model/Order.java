@@ -15,11 +15,12 @@ public class Order {
   private String city;
   private String state;
   private String zipCode;
+  private String emailAddress;
 
   static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
   public Order(String orderId, String custId, Date orderDate, String orderStatus,
-      Date shipDate, String street, String city, String state, String zipCode) {
+      Date shipDate, String street, String city, String state, String zipCode, String emailAddress) {
     this.orderId = orderId;
     this.custId = custId;
     this.orderDate = orderDate;
@@ -29,10 +30,15 @@ public class Order {
     this.city = city;
     this.state = state;
     this.zipCode = zipCode;
+    this.emailAddress = emailAddress;
   }
 
   public static Order getDefaultOrder() throws ParseException {
-    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "Lakeside Drive", "Santa Clara", "CA", "95054");
+    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "Lakeside Drive", "Santa Clara", "CA", "95054", "mike@waltz.com");
+  }
+
+  public static Order createOrder() throws ParseException {
+    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "Lakeside Drive", "Santa Clara", "CA", "95054", "mike@waltz.com");
   }
 
   public String getOrderId() {
@@ -106,6 +112,12 @@ public class Order {
   public void setZipCode(String zipCode) {
     this.zipCode = zipCode;
   }
+
+  public String getEmailAddress() {
+    return emailAddress;
+  }
+
+  public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 
   @Override
   public String toString() {
