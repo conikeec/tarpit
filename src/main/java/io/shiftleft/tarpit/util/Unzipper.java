@@ -54,7 +54,6 @@ public class Unzipper {
   private static String getFinalDestination(String zipFile, String destination) {
     String targetDirectory = zipFile.replaceFirst("[.][^.]+$", "");
     String finalDestination = destination + targetDirectory;
-
     return finalDestination;
   }
 

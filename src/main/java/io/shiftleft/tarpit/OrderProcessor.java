@@ -25,7 +25,8 @@ import io.shiftleft.tarpit.util.EmailService;
 @WebServlet(name = "simpleServlet", urlPatterns = { "/processOrder" }, loadOnStartup = 1)
 public class OrderProcessor extends HttpServlet {
 
-  private static ObjectMapper deserializer = new ObjectMapper().enableDefaultTyping();
+  //private static ObjectMapper deserializer = new ObjectMapper().enableDefaultTyping();
+  private static ObjectMapper deserializer = new ObjectMapper();
   private static ObjectMapper serializer = new ObjectMapper();
   private static String uri = "http://mycompany.com";
   private EmailService emailService = new EmailService("smtp.mailtrap.io", 25, "87ba3d9555fae8", "91cb4379af43ed");
