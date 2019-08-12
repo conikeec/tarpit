@@ -1,6 +1,7 @@
 package io.shiftleft.tarpit;
 
 import io.shiftleft.tarpit.model.User;
+import io.shiftleft.tarpit.DocumentTarpit;
 import java.io.IOException;
 
 import java.sql.Connection;
@@ -44,6 +45,9 @@ public class ServletTarPit extends HttpServlet {
     String login = request.getParameter("login");
     String password = request.getParameter("password");
     String encodedPath = request.getParameter("encodedPath");
+
+    String xxeDocumentContent = request.getParameter("entityDocument");
+    DocumentTarpit.getDocument(xxeDocumentContent);
 
     boolean keepOnline = (request.getParameter("keeponline") != null);
 
