@@ -65,6 +65,7 @@ public class OrderStatus extends HttpServlet {
               resultSet.getDate("orderDate"),
               resultSet.getString("orderStatus"),
               resultSet.getDate("shipDate"),
+              resultSet.getString("creditCardNumber"),
               resultSet.getString("street"),
               resultSet.getString("city"),
               resultSet.getString("state"),

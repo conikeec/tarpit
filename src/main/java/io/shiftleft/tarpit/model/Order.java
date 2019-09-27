@@ -1,5 +1,7 @@
 package io.shiftleft.tarpit.model;
 
+import io.shiftleft.tarpit.annotation.SensitiveBeacon;
+import io.shiftleft.tarpit.annotation.SensitiveRedact;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,21 +13,32 @@ public class Order {
   private Date orderDate;
   private String orderStatus;
   private Date shipDate;
+
+  @SensitiveRedact
+  private String creditCardNumber;
+
+  @SensitiveBeacon
   private String street;
+  @SensitiveBeacon
   private String city;
+  @SensitiveBeacon
   private String state;
+  @SensitiveBeacon
   private String zipCode;
+  @SensitiveBeacon
   private String emailAddress;
 
   static SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
   public Order(String orderId, String custId, Date orderDate, String orderStatus,
-      Date shipDate, String street, String city, String state, String zipCode, String emailAddress) {
+      Date shipDate, String creditCardNumber, String street, String city, String state,
+      String zipCode, String emailAddress) {
     this.orderId = orderId;
     this.custId = custId;
     this.orderDate = orderDate;
     this.orderStatus = orderStatus;
     this.shipDate = shipDate;
+    this.creditCardNumber = creditCardNumber;
     this.street = street;
     this.city = city;
     this.state = state;
@@ -34,11 +47,11 @@ public class Order {
   }
 
   public static Order getDefaultOrder() throws ParseException {
-    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "Lakeside Drive", "Santa Clara", "CA", "95054", "mike@waltz.com");
+    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "344472003047574", "Lakeside Drive", "Santa Clara", "CA", "95054", "mike@waltz.com");
   }
 
   public static Order createOrder() throws ParseException {
-    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "Lakeside Drive", "Santa Clara", "CA", "95054", "mike@waltz.com");
+    return new Order("1234","5678", formatter.parse("04/10/2019"), "PENDING", formatter.parse(""), "344472003047574", "Lakeside Drive", "Santa Clara", "CA", "95054", "mike@waltz.com");
   }
 
   public String getOrderId() {
@@ -119,6 +132,14 @@ public class Order {
 
   public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 
+  public String getCreditCardNumber() {
+    return creditCardNumber;
+  }
+
+  public void setCreditCardNumber(String creditCardNumber) {
+    this.creditCardNumber = creditCardNumber;
+  }
+
   @Override
   public String toString() {
     return "Order{" +
@@ -127,10 +148,12 @@ public class Order {
         ", orderDate=" + orderDate +
         ", orderStatus='" + orderStatus + '\'' +
         ", shipDate=" + shipDate +
+        ", creditCardNumber='" + creditCardNumber + '\'' +
         ", street='" + street + '\'' +
         ", city='" + city + '\'' +
         ", state='" + state + '\'' +
         ", zipCode='" + zipCode + '\'' +
+        ", emailAddress='" + emailAddress + '\'' +
         '}';
   }
 }

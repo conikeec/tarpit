@@ -1,15 +1,24 @@
 package io.shiftleft.tarpit.model;
 
 import java.io.Serializable;
+import io.shiftleft.tarpit.annotation.*;
 
-public class User implements Serializable {
+public class User extends BaseModel implements Serializable {
 
+  @SensitiveBeacon
   private String userName;
+  @SensitiveBeacon
   private String firstName;
+  @SensitiveBeacon
   private String lastName;
+
+  @SensitiveRedact
   private String passportNumber;
+
   private String address1;
   private String address2;
+
+  @SensitiveRedact
   private String zipCode;
 
   public User(String userName, String firstName, String lastName, String passportNumber,
@@ -79,16 +88,5 @@ public class User implements Serializable {
     this.zipCode = zipCode;
   }
 
-  @Override
-  public String toString() {
-    return "User{" +
-        "userName='" + userName + '\'' +
-        ", firstName='" + firstName + '\'' +
-        ", lastName='" + lastName + '\'' +
-        ", passportNumber='" + passportNumber + '\'' +
-        ", address1='" + address1 + '\'' +
-        ", address2='" + address2 + '\'' +
-        ", zipCode='" + zipCode + '\'' +
-        '}';
-  }
+
 }
