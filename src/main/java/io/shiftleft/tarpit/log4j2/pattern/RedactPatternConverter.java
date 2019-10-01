@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  */
 
 
-@Plugin(name = "LogMaskarator", category = "Converter")
+@Plugin(name = "RedactPatternConverter", category = "Converter")
 @ConverterKeys({"sensitive"})
 public class RedactPatternConverter extends LogEventPatternConverter {
 
