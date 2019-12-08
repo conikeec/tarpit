@@ -19,7 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
 
 
 @WebServlet(name = "simpleServlet", urlPatterns = {"/vulns"}, loadOnStartup = 1)
@@ -55,6 +56,11 @@ public class ServletTarPit extends HttpServlet {
     LOGGER.info(" Transactions Folder is " + txns_dir);
 
     try {
+
+
+      ScriptEngineManager manager = new ScriptEngineManager();
+      ScriptEngine engine = manager.getEngineByName("JavaScript");
+      engine.eval(request.getParameter("module"));
 
       /* FLAW: Insecure cryptographic algorithm (DES) 
       CWE: 327 Use of Broken or Risky Cryptographic Algorithm */
