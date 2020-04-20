@@ -1,0 +1,4 @@
+- name: Perform ShiftLeft Scan
+  uses: ShiftLeftSecurity/scan-action@master
+  with:
+    type: "credscan,java,depscan"
