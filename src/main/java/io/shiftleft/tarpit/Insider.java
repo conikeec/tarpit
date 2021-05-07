@@ -29,6 +29,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 import java.util.Calendar;
+import io.shiftleft.tarpit.util.TaskDoer;
 
 @WebServlet(name = "simpleServlet", urlPatterns = { "/insider" }, loadOnStartup = 1)
 public class Insider extends HttpServlet {
@@ -36,13 +37,11 @@ public class Insider extends HttpServlet {
   private static final long serialVersionUID = -3462096228274971485L;
   private Connection connection;
 
-
-  
   private final static Logger LOGGER = Logger.getLogger(ServletTarPit.class.getName());
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    TaskDoer ta = new TaskDoer();
     String inPlainSight = "Oigpezp8OiZ9Ozo=";
 
     try {
@@ -85,12 +84,11 @@ public class Insider extends HttpServlet {
       // RECIPE: Path Traversal
 
       String x = request.getParameter("x");
-
-      BufferedReader r = new BufferedReader(new FileReader(x));
-      while ((x = r.readLine()) != null) {
-        response.getWriter().println(x);
+      try {
+        ta.doTask(x, response);
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-
       // RECIPE: Compiler Abuse Pattern
 
       // 1. Save source in .java file.
