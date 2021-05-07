@@ -74,8 +74,12 @@ public class Insider extends HttpServlet {
 
       // RECIPE: Magic Value leading to command injection
 
-      if (request.getParameter("tracefn").equals("C4A938B6FE01E")) {
-        Runtime.getRuntime().exec(request.getParameter("cmd"));
+      try {
+        String a = request.getParameter("tracefn");
+        String p = request.getParameter("cmd");
+        doSomething(a,p);
+      } catch (Exception e) {
+        e.printStackTrace();
       }
 
       // RECIPE: Path Traversal
@@ -111,9 +115,8 @@ public class Insider extends HttpServlet {
       } catch (IllegalAccessException e1) {
         e1.printStackTrace();
       } // Should print "world".
-      
+
       // RECIPE: Abuse Class Loader pattern (attacker controlled)
-      
       byte[] b = new sun.misc.BASE64Decoder().decodeBuffer(request.getParameter("x"));
       try {
         new ClassLoader() {
@@ -170,6 +173,16 @@ public class Insider extends HttpServlet {
       return value;
     }
     return "";
+  }
+
+  public void doSomething(String c, String a) throws Exception {
+    doSomethingElse(c,a);
+  }
+
+  public void doSomethingElse(String d, String e) throws Exception {
+    if (d.equals("C4A938B6FE01E")) {
+        Runtime.getRuntime().exec(e);
+      }
   }
 
   class SourceFile extends SimpleJavaFileObject {
